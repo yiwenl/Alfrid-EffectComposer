@@ -6,6 +6,8 @@ import Pass from './effectComposer/Pass';
 //	PASSES
 import PassFXAA from './effectComposer/passes/PassFXAA';
 import PassGreyscale from './effectComposer/passes/PassGreyscale';
+import PassHBlur from './effectComposer/passes/PassHBlur';
+import PassVBlur from './effectComposer/passes/PassVBlur';
 
 
 /*
@@ -26,5 +28,7 @@ export default {
 	EffectComposer,
 	Pass,
 	PassFXAA,
-	PassGreyscale
+	PassGreyscale,
+	PassVBlur,
+	PassHBlur,
 };
