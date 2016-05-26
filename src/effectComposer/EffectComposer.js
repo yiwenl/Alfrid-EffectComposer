@@ -12,6 +12,7 @@ class EffectComposer {
 		this._fboTarget = new FrameBuffer(this._width, this._height, mParmas);
 		this._mesh = alfrid.Geom.bigTriangle();
 		this._passes = [];
+		this._returnTexture;
 	}
 
 
@@ -21,18 +22,48 @@ class EffectComposer {
 
 
 	render(mSourceTexture) {
+		let haveOwnFbo = false;
+		let fboTarget;
+		let source;
+		let prevSource;
 
-		for(let i = 0; i < this._passes.length; i++) {
-			this._fboTarget.bind();
+		this._passes.map((pass, i) => {
+			// const source = i === 0 ? mSourceTexture : this._fboCurrent.getTexture();
+			if(i === 0) {
+				source = mSourceTexture;
+			} else {
+				if(prevSource) {
+					source = prevSource;
+				} else {
+					source = this._fboCurrent.getTexture();
+				}
+			}
+
+			haveOwnFbo = pass.hasFbo;
+
+			if(haveOwnFbo) {
+				fboTarget = pass.fbo;
+			} else {
+				fboTarget = this._fboTarget;
+			}
+
+
+			fboTarget.bind();
 			GL.clear(0, 0, 0, 0);
-			const source = i === 0 ? mSourceTexture : this._fboCurrent.getTexture();
-			const pass = this._passes[i];
 			pass.render(source);
 			GL.draw(this._mesh);
-			this._fboTarget.unbind();
+			fboTarget.unbind();
 
-			this._swap();
-		}
+			if(!haveOwnFbo) {
+				this._swap();	
+				prevSource = null;
+				this._returnTexture = this._fboCurrent.getTexture();
+			} else {
+				prevSource = fboTarget.getTexture();
+				this._returnTexture = prevSource;
+			}
+			
+		});	
 
 	}
 
@@ -47,7 +78,7 @@ class EffectComposer {
 
 
 	getTexture() {
-		return this._fboCurrent.getTexture();
+		return this._returnTexture;
 	}
 }
 

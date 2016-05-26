@@ -1,8 +1,7 @@
 // SceneApp.js
 import alfrid, { GL } from 'alfrid';
-import alfridEffectComposer, { EffectComposer, Pass } from '../alfridEffectComposer';
+import { EffectComposer, Pass, PassFXAA, PassGreyscale } from '../alfridEffectComposer';
 
-const fsGreyscale = require('../effectComposer/shaders/greyscale.frag');
 const fsSeparate = require('../effectComposer/shaders/separate.frag');
 
 class SceneApp extends alfrid.Scene {
@@ -15,7 +14,6 @@ class SceneApp extends alfrid.Scene {
 
 
 	_initTextures() {
-
 		this._fboRender = new alfrid.FrameBuffer(GL.width, GL.height);
 	}
 	
@@ -27,12 +25,16 @@ class SceneApp extends alfrid.Scene {
 		this._bBall = new alfrid.BatchBall();
 
 		this._composer = new EffectComposer(GL.width, GL.height);
-		this.passGreyscale = new Pass(fsGreyscale);
-		this.passSeparate = new Pass(fsSeparate);
+		this.passGreyscale = new PassGreyscale();
+		const fboSize = 256;
+		this.passSeparate = new Pass(fsSeparate, fboSize, fboSize);
+		const passFXAA = new PassFXAA();
 
+		
 		
 		this._composer.addPass(this.passGreyscale);
 		this._composer.addPass(this.passSeparate);
+		this._composer.addPass(passFXAA);
 	}
 
 
@@ -41,7 +43,7 @@ class SceneApp extends alfrid.Scene {
 
 		const s = Math.sin(this.time) * 0.5 + 0.5;
 		const c = Math.cos(this.time * Math.PI) * 0.5 + 0.5;
-		this.passGreyscale.uniform('saturation', 'float', s);
+		this.passGreyscale.saturation = 0.5 * s;
 		this.passSeparate.uniform('range', 'float', c * 0.01);
 
 		this.orbitalControl.ry.value += 0.001;

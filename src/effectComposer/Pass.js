@@ -3,14 +3,15 @@
 import alfrid, { GL, FrameBuffer } from 'alfrid';
 
 class Pass {
-	constructor(mSource, mWidth = 0, mHeight = 0, mCreateStandaloneFbo = false, mParmas = {}) {
+	constructor(mSource, mWidth = 0, mHeight = 0, mParmas = {}) {
 		this.shader = new alfrid.GLShader(alfrid.ShaderLibs.bigTriangleVert, mSource);
 
 		this._width = mWidth;
 		this._height = mHeight;
 		this._uniforms = {};
+		this._hasOwnFbo = this._width > 0 && this._width > 0;
 
-		if(mCreateStandaloneFbo) {
+		if (this._hasOwnFbo) {
 			this._fbo = new FrameBuffer(this._width, this.height, mParmas);
 		}
 	}
@@ -39,6 +40,8 @@ class Pass {
 	get width() {	return this._width;	}
 	get height() {	return this._height;	}
 	get fbo() {	return this._fbo;	}
+	get hasFbo() {	return this._hasOwnFbo; }
+	
 }
 
 

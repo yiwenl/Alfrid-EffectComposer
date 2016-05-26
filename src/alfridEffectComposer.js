@@ -3,6 +3,10 @@
 import EffectComposer from './effectComposer/EffectComposer';
 import Pass from './effectComposer/Pass';
 
+//	PASSES
+import PassFXAA from './effectComposer/passes/PassFXAA';
+import PassGreyscale from './effectComposer/passes/PassGreyscale';
+
 
 /*
 class AlfridEffectComposer {
@@ -20,5 +24,7 @@ export default effectComposer;
 
 export default {
 	EffectComposer,
-	Pass
+	Pass,
+	PassFXAA,
+	PassGreyscale
 };
