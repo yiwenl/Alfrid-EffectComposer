@@ -17,7 +17,18 @@ class EffectComposer {
 
 
 	addPass(pass) {
-		this._passes.push(pass);
+		if(pass.getPasses) {
+			this.addPass(pass.getPasses());
+			return;
+		}
+		
+		if (pass.length) {
+			for(let i = 0; i < pass.length; i++) {
+				this._passes.push(pass[i]);
+			}
+		} else {
+			this._passes.push(pass);
+		}
 	}
 
 
@@ -28,7 +39,6 @@ class EffectComposer {
 		let prevSource;
 
 		this._passes.map((pass, i) => {
-			// const source = i === 0 ? mSourceTexture : this._fboCurrent.getTexture();
 			if(i === 0) {
 				source = mSourceTexture;
 			} else {
@@ -65,6 +75,7 @@ class EffectComposer {
 			
 		});	
 
+		return this._returnTexture;
 	}
 
 	_swap() {
@@ -81,5 +92,6 @@ class EffectComposer {
 		return this._returnTexture;
 	}
 }
+
 
 export default EffectComposer;

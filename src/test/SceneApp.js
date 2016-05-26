@@ -1,6 +1,6 @@
 // SceneApp.js
 import alfrid, { GL } from 'alfrid';
-import { EffectComposer, Pass, PassFXAA, PassGreyscale, PassHBlur, PassVBlur } from '../alfridEffectComposer';
+import { EffectComposer, Pass, PassFXAA, PassGreyscale, PassBlur } from '../alfridEffectComposer';
 
 const fsSeparate = require('../effectComposer/shaders/separate.frag');
 
@@ -27,16 +27,14 @@ class SceneApp extends alfrid.Scene {
 		this._composer = new EffectComposer(GL.width, GL.height);
 		this.passGreyscale = new PassGreyscale();
 		this.passSeparate = new Pass(fsSeparate);
-		const fboSize = 256;
+		const fboSize = 512;
 		const passFXAA = new PassFXAA();
-		const passVBlur = new PassVBlur(9, fboSize, fboSize);
-		const passHBlur = new PassHBlur(9, fboSize, fboSize);
+		const passBlur = new PassBlur(9, fboSize, fboSize);
 
 		
 		this._composer.addPass(this.passGreyscale);
 		this._composer.addPass(this.passSeparate);
-		this._composer.addPass(passVBlur);
-		this._composer.addPass(passHBlur);
+		this._composer.addPass(passBlur);
 		// this._composer.addPass(passVBlur);
 		// this._composer.addPass(passHBlur);
 		// this._composer.addPass(passVBlur);
