@@ -1,6 +1,6 @@
 // EffectComposer.js
 
-import alfrid, { GL, FrameBuffer } from 'alfrid';
+import { Geom, GL, FrameBuffer } from 'alfrid';
 
 class EffectComposer {
 
@@ -10,7 +10,7 @@ class EffectComposer {
 
 		this._fboCurrent = new FrameBuffer(this._width, this._height, mParmas);
 		this._fboTarget = new FrameBuffer(this._width, this._height, mParmas);
-		this._mesh = alfrid.Geom.bigTriangle();
+		this._mesh = Geom.bigTriangle();
 		this._passes = [];
 		this._returnTexture;
 	}

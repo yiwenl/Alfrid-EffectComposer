@@ -1,6 +1,6 @@
 // Pass.js
 
-import alfrid, { GL, FrameBuffer } from 'alfrid';
+import { GLShader, FrameBuffer, ShaderLibs } from 'alfrid';
 
 class Pass {
 	constructor(mSource, mWidth = 0, mHeight = 0, mParmas = {}) {
